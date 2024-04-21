@@ -2,6 +2,8 @@
 
 ## 🛠 Run it locally
 
+UwU
+
 1. Install dependencies
 
 ```sh
