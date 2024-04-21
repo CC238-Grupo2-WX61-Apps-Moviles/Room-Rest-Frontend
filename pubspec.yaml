@@ -1,0 +1,45 @@
+name: akira_mobile
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+    
+
+  intl_phone_number_input: ^0.7.0
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.9.2
+  flutter_lints: ^3.0.1
+
+flutter_icons:  
+  android: true
+  ios: true
+  image_path: "assets/akiraLogo.png"
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/akiraLogo.png
+    - assets/casa.png
+    - assets/logo.png
+    - assets/usericon.png
+    - assets/passwordicon.png
+    - assets/returnIcon.png
+    - assets/homeIcon.png
+    - assets/accountIcon.png
+    - assets/categorIcon.png
+    - assets/carIcon.png
