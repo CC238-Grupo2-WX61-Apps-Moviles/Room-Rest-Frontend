@@ -147,10 +147,10 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                                           }).toList(),
                                         ),
                                       ),
-                                      // Ajusta el valor de top según tu diseño
+                               
                                       Positioned(
-                                        top: 100.0, // Ajusta este valor según sea necesario
-                                        left: 13.0, // Puedes ajustar esto según tu diseño
+                                        top: 100.0, 
+                                        left: 13.0, 
                                         child: Image.asset(
                                           'assets/passwordicon.png',
                                           height: 10.0,

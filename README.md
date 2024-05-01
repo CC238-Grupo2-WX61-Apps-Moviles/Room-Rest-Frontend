@@ -1,27 +1,30 @@
-![Header](https://github.com/CC238-Grupo2-WX61-Apps-Moviles/room-rest-landing-page/blob/98b5a9a4edd0ed94816c73396cee683b508a4eb1/public/assets/bannerAkira.png)
+![Header](./assets/bannerAkira.png)
 
-## 🛠 Run it locally
-
-1. Install dependencies
+## 🛠 Building Process
 
 ```sh
-   npm install
+   This project is a starting point for a Flutter application.
 ```
 
-2. Run the application
-```sh
-   npm start
-```
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+
+
 
 <br>
 
 ## 💻 Tech Stack
 `Flutter`
 `Dart`
-`Firebase`
-`Postgres`
-
-
+`MongoDB`
+`FireBase`
 
 <br>
+
 > Now you can enjoy! 

@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
-
+import 'cart.dart'; 
+import 'account.dart'; 
 
 class CustomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTabTapped;
+  final BuildContext context; 
 
   const CustomNavBar({
-    super.key,
+    Key? key,
     required this.selectedIndex,
     required this.onTabTapped,
-  });
+    required this.context, 
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 65,
-      decoration: const BoxDecoration(color: Color.fromARGB(255, 236, 236, 236)),
+      decoration: const BoxDecoration(color:  Color.fromARGB(255, 236, 236, 236)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildNavBarItem('assets/homeIcon.png', 'Inicio', 0),
-            buildNavBarItem('assets/categorIcon.png', 'Categorias', 1),
             buildNavBarItem('assets/carIcon.png', 'Carrito', 2),
             buildNavBarItem('assets/accountIcon.png', 'Cuenta', 3),
           ],
@@ -35,7 +37,21 @@ class CustomNavBar extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () {
-          onTabTapped(index);
+          if (index == 2) {
+            
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (index == 3) {
+         
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AccountScreen()),
+            );
+          } else {
+            onTabTapped(index);
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'start.dart';
-import 'navbar.dart';
-import 'categories.dart'; // Importa tus pantallas adicionales
-import 'car.dart';
-import 'account.dart';
+import 'navbar.dart'; 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+   const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,69 +10,161 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
-  final PageController _pageController = PageController(); // Agrega el controlador de página
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SizedBox(
-            child: Card(
-              elevation: 0,
-              color: const Color.fromARGB(0, 0, 0, 0),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const StartScreen()),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Image.asset(
-                                'assets/returnIcon.png',
-                                height: 20.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded( // Reemplaza tu contenido actual con el PageView
-                          child: PageView.builder(
-                            controller: _pageController,
-                            itemCount: 6, // Ajusta según la cantidad de imágenes
-                            onPageChanged: _updateSelectedTab,
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                'assets/logo.png',
-                                height: 230,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 2,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: const AssetImage('assets/homeYugioh.png'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5),
+                    BlendMode.darken,
                   ),
                 ),
               ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Lo más top',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 249, 236, 236),
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    'Kaiba Seto',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  Text(
+                    'Yu-Gi-Oh!',
+                    style: TextStyle(
+                      color:  Color.fromARGB(255, 244, 244, 244),
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'Mundo Anime',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(18, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.grey[300],
+                      ),
+                      child: Image.asset(
+                        'assets/anime${index % 12 + 1}.png', // Usar imágenes de anime del 1 al 12, repitiendo si es necesario
+                        fit: BoxFit.cover,
+                        width: 150.0,
+                        height: 150.0,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'K-Pop',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(18, (index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.grey[300],
+                      ),
+                      child: Image.asset(
+                        'assets/anime${index % 12 + 1}.png', // Usar imágenes de anime del 1 al 12, repitiendo si es necesario
+                        fit: BoxFit.cover,
+                        width: 150.0,
+                        height: 150.0,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'Zona de Lectura',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(18, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.grey[300],
+                      ),
+                      child: Image.asset(
+                        'assets/anime${index % 12 + 1}.png', // Usar imágenes de anime del 1 al 12, repitiendo si es necesario
+                        fit: BoxFit.cover,
+                        width: 150.0,
+                        height: 150.0,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+          ],
         ),
       ),
       bottomNavigationBar: CustomNavBar(
         selectedIndex: _selectedTabIndex,
         onTabTapped: _updateSelectedTab,
+        context: context,
       ),
     );
   }
@@ -92,3 +180,4 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 }
+
