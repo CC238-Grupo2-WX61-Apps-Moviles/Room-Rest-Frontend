@@ -1,7 +1,6 @@
 import 'package:akira_mobile/screens/singin2.dart';
 import 'package:flutter/material.dart';
 import 'start.dart';
-import 'package:akira_mobile/screens/home.dart';
 
 class SingInScreen extends StatelessWidget {
   const SingInScreen({super.key});
