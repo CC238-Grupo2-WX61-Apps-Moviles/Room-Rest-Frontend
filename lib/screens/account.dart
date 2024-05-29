@@ -151,7 +151,7 @@ class AccountScreen extends StatelessWidget {
                     );
                   },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFAA1D1D),
+                        backgroundColor: const Color(0xFFAA1D1D), // Color de botón #AA1D1D
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                     ),
                     child: const Text(

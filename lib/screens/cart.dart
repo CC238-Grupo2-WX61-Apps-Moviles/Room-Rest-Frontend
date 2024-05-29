@@ -80,7 +80,7 @@ class CartScreen extends StatelessWidget {
                         // Acción para ir al checkout
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFAA1D1D), // Color de botón #AA1D1D
+                        backgroundColor: const Color(0xFFAA1D1D), // Color de botón #AA1D1D
                       ),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.0),
