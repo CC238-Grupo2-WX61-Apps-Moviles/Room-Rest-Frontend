@@ -9,6 +9,9 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
+class UserDataProvider {
+  static Map<String, dynamic> userData = {};
+}
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
@@ -29,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+
+
   Future<void> _login() async {
     try {
       print('Attempting login with email: ${_emailController.text}, password: ${_passwordController.text}');
@@ -37,10 +42,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response['status'] == 'SUCCESS') {
         if (!mounted) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        final userId = response['data']['userId'];
+        final userDataResponse = await AuthService.getUserData(userId);
+        if (userDataResponse != null) {
+          UserDataProvider.userData = response['data'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          print('Error: Failed to fetch user data for userId: $userId');
+        }
       } else {
         setState(() {
           _errorMessage = 'Credenciales inválidas, vuelva a intentarlo';
@@ -53,6 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
