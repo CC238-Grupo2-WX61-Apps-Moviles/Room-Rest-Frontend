@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.0.0
+  http: ^0.13.3
+  logging: ^1.0.0
     
 
   intl_phone_number_input: ^0.7.0
