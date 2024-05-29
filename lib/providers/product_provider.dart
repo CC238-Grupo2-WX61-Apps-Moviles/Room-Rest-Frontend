@@ -8,6 +8,7 @@ class ProductProvider with ChangeNotifier {
     List<Product> _kpopProducts = [];
     List<Product> _animeProducts = [];
     List<Product> _lecturaProducts = [];
+    List<Product> _searchProducts = [];
     bool _isLoading = false;
     String? _errorMessage;
 
@@ -15,6 +16,7 @@ class ProductProvider with ChangeNotifier {
     List<Product> get kpopProducts => _kpopProducts;
     List<Product> get animeProducts => _animeProducts;
     List<Product> get lecturaProducts => _lecturaProducts;
+     List<Product> get searchProducts => _searchProducts;
     bool get isLoading => _isLoading;
     String? get errorMessage => _errorMessage;
 
@@ -28,6 +30,7 @@ class ProductProvider with ChangeNotifier {
             _kpopProducts = await ProductService().fetchKpopProducts();
             _animeProducts = await ProductService().fetchAnimeProducts();
             _lecturaProducts = await ProductService().fetchLecturaProducts();
+            _searchProducts = await ProductService().fetchSearchProducts("");
         } catch (e) {
             _errorMessage = 'Failed to load products: $e';
             print('Error fetching products: $e');
