@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:akira_mobile/screens/home.dart';
 
 class SingIn3Screen extends StatelessWidget {
-  const SingIn3Screen({super.key});
+   SingIn3Screen({Key? key}) : super(key: key);
+
+    final TextEditingController addressController = TextEditingController();
+    final TextEditingController districtController = TextEditingController();
+    final TextEditingController provinceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class SingIn3Screen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SingIn2Screen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
               },
               child: Padding(
@@ -65,6 +69,7 @@ class SingIn3Screen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           TextField(
+                            controller: addressController,
                             decoration: InputDecoration(
                               hintText: 'Dirección',
                               hintStyle: const TextStyle(
@@ -96,6 +101,7 @@ class SingIn3Screen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12.0),
                           TextField(
+                            controller: districtController,
                             decoration: InputDecoration(
                               hintText: 'Distrito',
                               hintStyle: const TextStyle(
@@ -127,6 +133,7 @@ class SingIn3Screen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12.0),
                           TextField(
+                            controller: provinceController,
                             decoration: InputDecoration(
                               hintText: 'Provincia',
                               hintStyle: const TextStyle(

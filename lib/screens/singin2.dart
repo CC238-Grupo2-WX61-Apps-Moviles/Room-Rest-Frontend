@@ -1,10 +1,30 @@
+import 'package:akira_mobile/screens/home.dart';
+import 'package:akira_mobile/screens/login.dart';
 import 'package:akira_mobile/screens/singin.dart';
 import 'package:akira_mobile/screens/singin3.dart';
 import 'package:flutter/material.dart';
-import 'package:akira_mobile/screens/home.dart';
+
+import '../services/auth_service.dart';
+import '../services/shipping_service.dart';
 
 class SingIn2Screen extends StatefulWidget {
-  const SingIn2Screen({super.key});
+  final TextEditingController nameController;
+  final TextEditingController surnameController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+
+  SingIn2Screen({
+    Key? key,
+    required this.nameController,
+    required this.surnameController,
+    required this.emailController,
+    required this.passwordController,
+  }) : super(key: key);
+
+
+   final TextEditingController phoneController = TextEditingController();
+   final TextEditingController paymentMethodController = TextEditingController();
+
   @override
   State<SingIn2Screen> createState() => _SingIn2ScreenState();
 }
@@ -28,7 +48,7 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SingInScreen()),
+                    MaterialPageRoute(builder: (context) => SingInScreen()),
                   );
                 },
                 child: Padding(
@@ -72,6 +92,7 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 TextField(
+                                  controller: widget.phoneController,
                                   decoration: InputDecoration(
                                     hintText: 'Teléfono',
                                     hintStyle: const TextStyle(
@@ -130,12 +151,14 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                                     children: [
                                       DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
-                                          value: selectedPaymentMethod,
+                                          value: widget.paymentMethodController.text.isEmpty
+                                              ? null
+                                              : widget.paymentMethodController.text,
                                           hint: const Text('Método de Pago'),
                                           isDense: true,
                                           onChanged: (String? newValue) {
                                             setState(() {
-                                              selectedPaymentMethod = newValue;
+                                              widget.paymentMethodController.text = newValue!;
                                             });
                                           },
                                           items: <String>['Crédito/Débito', 'Billetera Electrónica']
@@ -147,10 +170,10 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                                           }).toList(),
                                         ),
                                       ),
-                               
+
                                       Positioned(
-                                        top: 100.0, 
-                                        left: 13.0, 
+                                        top: 100.0,
+                                        left: 13.0,
                                         child: Image.asset(
                                           'assets/passwordicon.png',
                                           height: 10.0,
@@ -163,11 +186,42 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                             ),
                             const SizedBox(height: 175.0),
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const SingIn3Screen()),
-                                );
+                              onPressed: () async {
+                                try {
+                                  final registerResponse = await AuthService.register(
+                                    widget.nameController.text,
+                                    widget.surnameController.text,
+                                    widget.emailController.text,
+                                    widget.passwordController.text,
+                                    widget.phoneController.text,
+                                    widget.paymentMethodController.text,
+                                  );
+
+                                  print(registerResponse);
+                                  if (registerResponse['status'] == 'SUCCESS') {
+                                    try {
+                                      final shippingResponse = await ShippingService.createDefaultShippingData();
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const LoginScreen(),
+                                          ),
+                                        );
+
+                                    }
+                                    catch (e) {
+                                      // Manejar la excepción aquí
+                                      print('Excepción durante la creación de datos de envío: $e');
+                                    }
+
+                                  } else {
+                                    // Manejar el error de registro aquí
+                                    print('Error de registro: ${registerResponse['message']}');
+                                  }
+                                } catch (e) {
+                                  // Manejar la excepción aquí
+                                  print('Excepción durante el registro: $e');
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color.fromARGB(255, 173, 15, 15),
@@ -178,7 +232,7 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                                 minimumSize: const Size(double.infinity, 0),
                               ),
                               child: const Text(
-                                'Continuar',
+                                'Registrarse',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w400,

@@ -65,7 +65,7 @@ class StartScreen extends StatelessWidget {
                           onPressed: () {                    
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SingInScreen()),
+                              MaterialPageRoute(builder: (context) => SingInScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(

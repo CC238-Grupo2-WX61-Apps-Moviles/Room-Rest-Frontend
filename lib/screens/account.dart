@@ -1,11 +1,56 @@
 import 'package:akira_mobile/screens/start.dart';
 import 'package:flutter/material.dart';
 
-class AccountScreen extends StatelessWidget {
-   const AccountScreen({super.key});
+import '../services/shipping_service.dart';
+import '../services/user_service.dart';
+import 'login.dart';
+
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
+
+  @override
+  _AccountScreenState createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  Map<String, dynamic>? shippingData;
+  Map<String, dynamic> userData = UserDataProvider.userData;
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+    fetchShippingData();
+
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      final data = await UserService.getUserData(UserDataProvider.userData['userId']);
+      setState(() {
+        userData = data;
+      });
+    } catch (e) {
+      print('Failed to fetch user data: $e');
+    }
+  }
+
+  Future<void> fetchShippingData() async {
+    try {
+      print('UserId: ${UserDataProvider.userData['userId']}');
+      final data = await ShippingService.getShippingData(UserDataProvider.userData['userId']);
+      setState(() {
+        shippingData = data;
+      });
+    } catch (e) {
+      print('Failed to fetch shipping data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
          title: const Text('Cuenta'),
@@ -15,10 +60,10 @@ class AccountScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(
+            Center(
               child: Text(
-                'Hola Nirvana',
-                style: TextStyle(
+                'Hola ${userData['name']}',
+                style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -34,10 +79,10 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Información Personal',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -45,10 +90,10 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text('Nombres: Nirvana Gabriela'),
-                    Text('Apellidos: García Vásquez'),
-                    Text('Teléfono: +51 986 689 140'),
-                    Text('Correo: nirvagarcia@gmail.com'),
+                    Text('Nombres: ${userData['name']}'),
+                    Text('Apellidos: ${userData['surname']}'),
+                    Text('Teléfono: ${userData['numberCellphone']}'),
+                    Text('Correo: ${userData['email']}'),
                   ],
                 ),
               ),
@@ -62,10 +107,10 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Dirección',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -73,9 +118,9 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text('Dirección: Calle los Álamos 626'),
-                    Text('Distrito: San Isidro'),
-                    Text('Provincia: Lima'),
+                    Text('Dirección: ${shippingData?['address'] ?? 'Cargando...'}'),
+                    Text('Distrito: ${shippingData?['district'] ?? 'Cargando...'}'),
+                    Text('Provincia: ${shippingData?['province'] ?? 'Cargando...'}'),
                   ],
                 ),
               ),
@@ -89,10 +134,10 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Método de Pago',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -100,8 +145,8 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text('Método: Tarjeta'),
-                    Text('Tarjeta: 458 ***** ***** **7'),
+                    Text('Método: ${userData['payment']}'),
+                    Text('Tarjeta: ${shippingData?['linkedCard'] }'),
                   ],
                 ),
               ),
