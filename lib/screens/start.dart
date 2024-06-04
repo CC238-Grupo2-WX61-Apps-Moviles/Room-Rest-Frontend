@@ -1,5 +1,6 @@
 import 'package:akira_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:akira_mobile/screens/home.dart'; // Asegúrate de importar HomeScreen
 import 'singin.dart';
 
 class StartScreen extends StatelessWidget {
@@ -92,12 +93,20 @@ class StartScreen extends StatelessWidget {
                               fontSize: 14.0,
                             ),
                           ),
-                          const Text(
-                            'términos y condiciones',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 58, 58, 58),
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              );
+                            },
+                            child: const Text(
+                              'términos y condiciones',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 58, 58, 58),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                       ],
