@@ -53,5 +53,18 @@ class ProductService {
             throw Exception('Failed to load Lectura products');
         }
     }
+
+    Future<List<Product>> fetchSearchProducts(String query) async {
+    final response = await http.get(Uri.parse('$baseUrl/search?query=$query'));
+
+    if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<Product> products = body.map((dynamic item) => Product.fromJson(item)).toList();
+        return products;
+    } else {
+        throw Exception('Failed to search products');
+    }
+}
+
     
 }
