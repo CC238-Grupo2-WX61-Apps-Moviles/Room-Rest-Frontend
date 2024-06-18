@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ProductService {
 
-    final String baseUrl = 'http://antarticdonkeys.com/products';
+    final String baseUrl = 'https://api-akira.antarticdonkeys.com/products';
 
     Future<List<Product>> fetchProducts() async {
         final response = await http.get(Uri.parse(baseUrl));

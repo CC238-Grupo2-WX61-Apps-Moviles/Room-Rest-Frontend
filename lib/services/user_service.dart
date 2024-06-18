@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class UserService{
   static Future<Map<String, dynamic>> getUserData(int userId) async {
-    final response = await http.get(Uri.parse('http://antarticdonkeys.com/users/$userId'));
+    final response = await http.get(Uri.parse('https://api-akira.antarticdonkeys.com/users/$userId'));
 
     if (response.statusCode == 200 ) {
       return jsonDecode(response.body);

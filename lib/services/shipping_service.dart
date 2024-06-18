@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ShippingService{
 
   static Future<Map<String, dynamic>> getShippingData(int userId) async {
-    final response = await http.get(Uri.parse('http://antarticdonkeys.com/shipping/$userId'));
+    final response = await http.get(Uri.parse('https://api-akira.antarticdonkeys.com/shipping/$userId'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -14,7 +14,7 @@ class ShippingService{
   }
 
   static Future<Map<String, dynamic>> createDefaultShippingData() async {
-    final url = Uri.parse('http://antarticdonkeys.com/shipping');
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/shipping');
 
     final response = await http.post(
       url,
@@ -30,13 +30,31 @@ class ShippingService{
       }),
     );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to create default shipping data with status code: ${response.statusCode}');
+    }
+  }
+
+  static Future<Map<String, dynamic>> updateShippingData(int id, Map<String, dynamic> shippingData) async {
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/shipping/$id');
+
+    shippingData['shippingId'] = id;
+
+    final response = await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(shippingData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to update shipping data with status code: ${response.statusCode}');
     }
   }
 

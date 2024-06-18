@@ -1,7 +1,5 @@
-import 'package:akira_mobile/screens/home.dart';
 import 'package:akira_mobile/screens/login.dart';
 import 'package:akira_mobile/screens/singin.dart';
-import 'package:akira_mobile/screens/singin3.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
