@@ -1,3 +1,4 @@
+import 'package:akira_mobile/screens/processingshipping.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -104,9 +105,14 @@ class CheckoutScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Acción para ir a Checkout
+                   ElevatedButton(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProcessingPaymentScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFAA1D1D),
