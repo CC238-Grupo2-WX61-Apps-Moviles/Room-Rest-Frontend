@@ -94,15 +94,15 @@ class ShippingService{
     }
   }
 
-  static Future<Map<String, dynamic>> getOrderDetail(int orderId) async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders/$orderId');
+  static Future<List<dynamic>> getOrderDetails(int userId) async {
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders?userId=$userId');
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to fetch order detail with status code: ${response.statusCode}');
+      throw Exception('Failed to fetch order details with status code: ${response.statusCode}');
     }
   }
 
