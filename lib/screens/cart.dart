@@ -1,5 +1,7 @@
+import 'package:akira_mobile/services/shipping_service.dart';
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
+import 'checkout_screen.dart'; // Asegúrate de que el path es correcto
 import 'cart_model.dart';
 import 'login.dart';
 
@@ -11,12 +13,28 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   late Future<List<CartItem>> futureCartItems;
   Map<String, dynamic> userData = UserDataProvider.userData;
+  Map<String, dynamic>? shippingData;
 
   @override
   void initState() {
     super.initState();
     futureCartItems = CartService().getCartItems(userData['userId']);
+    fetchShippingData();
   }
+
+Future<void> fetchShippingData() async {
+  try {
+    final data = await ShippingService.getShippingData(userData['userId']);
+    setState(() {
+      shippingData = data;
+    });
+    print('Shipping data: $shippingData');
+  } catch (e) {
+    print('Failed to fetch shipping data: $e');
+  }
+}
+
+
 
   Future<void> deleteCartItem(int cartId) async {
     await CartService().deleteCart(cartId);
@@ -114,8 +132,17 @@ class _CartScreenState extends State<CartScreen> {
                         Container(
                           alignment: Alignment.center,
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Acción para ir al checkout
+                            onPressed: shippingData == null ? null : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CheckoutScreen(
+                                    userData: userData,
+                                    shippingData: shippingData!,
+                                    total: total,
+                                  ),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFAA1D1D),
@@ -154,12 +181,10 @@ class CartItemWidget extends StatefulWidget {
   final Function(int) onDelete;
   final Function() onQuantityChanged;
 
-
   const CartItemWidget({
     required this.item,
     required this.onDelete,
     required this.onQuantityChanged,
-
   });
 
   @override
@@ -224,7 +249,6 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       setState(() {
                         widget.item.quantity++;
                         widget.onQuantityChanged();
-
                       });
                     },
                   ),
