@@ -58,4 +58,52 @@ class ShippingService{
     }
   }
 
+  static Future<void> createOrder(String email, String address, String contact, double totalPrice, int userId) async {
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders');
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'email': email,
+        'address': address,
+        'contact': contact,
+        'totalPrice': totalPrice,
+        'userId': userId,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('Order created successfully');
+    } else {
+      throw Exception('Failed to create order with status code: ${response.statusCode}');
+    }
+  }
+
+  static Future<List<dynamic>> getOrders(int userId) async {
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders?userId=$userId');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch orders with status code: ${response.statusCode}');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getOrderDetail(int orderId) async {
+    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders/$orderId');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch order detail with status code: ${response.statusCode}');
+    }
+  }
+
 }

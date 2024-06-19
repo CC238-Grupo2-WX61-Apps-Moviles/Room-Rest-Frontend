@@ -1,24 +1,80 @@
-import 'package:akira_mobile/screens/start.dart';
+import 'package:akira_mobile/screens/order_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:akira_mobile/screens/UpdateAddress.dart';
+import 'package:akira_mobile/screens/start.dart';
+import '../services/shipping_service.dart';
+import '../services/user_service.dart';
+import 'login.dart';
 
-class AccountScreen extends StatelessWidget {
-   const AccountScreen({super.key});
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
+
+  @override
+  _AccountScreenState createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  Map<String, dynamic>? shippingData;
+  Map<String, dynamic> userData = UserDataProvider.userData;
+  List<Map<String, dynamic>> orders = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+    fetchShippingData();
+    fetchOrders();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      final data = await UserService.getUserData(UserDataProvider.userData['userId']);
+      setState(() {
+        userData = data;
+      });
+    } catch (e) {
+      print('Failed to fetch user data: $e');
+    }
+  }
+
+  Future<void> fetchShippingData() async {
+    try {
+      print('UserId: ${UserDataProvider.userData['userId']}');
+      final data = await ShippingService.getShippingData(UserDataProvider.userData['userId']);
+      setState(() {
+        shippingData = data;
+      });
+    } catch (e) {
+      print('Failed to fetch shipping data: $e');
+    }
+  }
+
+  Future<void> fetchOrders() async {
+    try {
+      final data = await ShippingService.getOrders(UserDataProvider.userData['userId']);
+      setState(() {
+        orders = List<Map<String, dynamic>>.from(data);
+      });
+    } catch (e) {
+      print('Failed to fetch orders: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         title: const Text('Cuenta'),
+        title: const Text('Cuenta'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(
+            Center(
               child: Text(
-                'Hola Nirvana',
-                style: TextStyle(
+                'Hola ${userData['name']}',
+                style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -34,21 +90,21 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Información Personal',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Text('Nombres: Nirvana Gabriela'),
-                    Text('Apellidos: García Vásquez'),
-                    Text('Teléfono: +51 986 689 140'),
-                    Text('Correo: nirvagarcia@gmail.com'),
+                    const SizedBox(height: 8.0),
+                    Text('Nombres: ${userData['name']}'),
+                    Text('Apellidos: ${userData['surname']}'),
+                    Text('Teléfono: ${userData['numberCellphone']}'),
+                    Text('Correo: ${userData['email']}'),
                   ],
                 ),
               ),
@@ -62,20 +118,39 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Dirección',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Text('Dirección: Calle los Álamos 626'),
-                    Text('Distrito: San Isidro'),
-                    Text('Provincia: Lima'),
+                    const SizedBox(height: 8.0),
+                    Text('Dirección: ${shippingData?['address'] ?? 'Cargando...'}'),
+                    Text('Distrito: ${shippingData?['district'] ?? 'Cargando...'}'),
+                    Text('Provincia: ${shippingData?['province'] ?? 'Cargando...'}'),
+                    const SizedBox(height: 8.0),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdateAddressScreen()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.black),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                      child: const Text(
+                        'Actualizar Dirección',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -89,23 +164,64 @@ class AccountScreen extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Método de Pago',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Text('Método: Tarjeta'),
-                    Text('Tarjeta: 458 ***** ***** **7'),
+                    const SizedBox(height: 8.0),
+                    Text('Método: ${userData['payment']}'),
+                    Text('Tarjeta: ${shippingData?['linkedCard'] ?? ''}'),
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: 20.0),
+            if (orders.isNotEmpty)
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Historial de Pedidos',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      ...orders.map((order) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderDetailScreen(orderId: order['id']),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text('Track Nº: ${order['id']}', style: TextStyle(color: Colors.red)),
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              ),
             const SizedBox(height: 20.0),
             Center(
               child: Column(
@@ -144,14 +260,14 @@ class AccountScreen extends StatelessWidget {
                   const SizedBox(height: 12.0),
                   ElevatedButton(
                     onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const StartScreen()),
-                      (route) => false, 
-                    );
-                  },
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const StartScreen()),
+                            (route) => false,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFAA1D1D), // Color de botón #AA1D1D
+                      backgroundColor: const Color(0xFFAA1D1D), // Color de botón #AA1D1D
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                     ),
                     child: const Text(

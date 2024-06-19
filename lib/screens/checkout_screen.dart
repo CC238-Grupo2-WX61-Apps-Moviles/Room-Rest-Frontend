@@ -1,5 +1,6 @@
 import 'package:akira_mobile/screens/processingshipping.dart';
 import 'package:flutter/material.dart';
+import '../services/shipping_service.dart';
 
 class CheckoutScreen extends StatelessWidget {
   final Map<String, dynamic> userData;
@@ -105,14 +106,25 @@ class CheckoutScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                   ElevatedButton(
+                  ElevatedButton(
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProcessingPaymentScreen(),
-                        ),
-                      );
+                      try {
+                        await ShippingService.createOrder(
+                          userData['email'],
+                          shippingData['address'],
+                          '${userData['name']} ${userData['surname']}',
+                          total,
+                          userData['userId'],
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProcessingPaymentScreen(),
+                          ),
+                        );
+                      } catch (e) {
+                        print('Error creating order: $e');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFAA1D1D),
@@ -132,7 +144,7 @@ class CheckoutScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-               //
+               //cnasjkonfjals
               ],
             ),
           ],
