@@ -1,6 +1,10 @@
 import 'package:akira_mobile/providers/product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import '../services/cart_service.dart';
+import 'cart_model.dart';
+import 'login.dart';
 import 'navbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,9 +14,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+
+
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
   final PageController _pageController = PageController();
+  final Map<String, dynamic> userData = UserDataProvider.userData;
+
 
   @override
   void initState() {
@@ -21,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +229,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Lógica para agregar al carrito
+                                  CartItem item = CartItem(
+                                    id: product.id,
+                                    quantity: 1,
+                                    userId: userData['userId'],
+                                    nameCategory: product.nameCategory,
+                                    name: product.name,
+                                    price: product.price,
+                                    color: product.color,
+                                    category: product.category,
+                                    description: product.description,
+                                    image: product.image,
+                                    productId: product.id,
+                                  );
+                                  CartService().addToCart(item);
+                                  Fluttertoast.showToast(
+                                      msg: "Producto agregado al carrito",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.green,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
                                 },
                                 child: const Text('Agregar al carrito'),
                               ),

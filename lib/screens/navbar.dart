@@ -45,10 +45,10 @@ class CustomNavBar extends StatelessWidget {
             MaterialPageRoute(builder: (context) => SearchScreen()),
           );
         } else if  (index == 2) {
-            
+
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CartScreen()),
+              MaterialPageRoute(builder: (context) => CartScreen()),
             );
           } else if (index == 3) {
          
