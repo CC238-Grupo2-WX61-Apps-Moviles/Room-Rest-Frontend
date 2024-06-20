@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:akira_mobile/screens/product_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../services/cart_service.dart';
+import 'cart_model.dart';
+import 'login.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
 
-  const ProductDetailScreen({Key? key, required this.product}) : super(key: key);
+   ProductDetailScreen({Key? key, required this.product}) : super(key: key);
+
+  final Map<String, dynamic> userData = UserDataProvider.userData;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,29 @@ class ProductDetailScreen extends StatelessWidget {
                         const SizedBox(height: 16.0),
                         ElevatedButton(
                           onPressed: () {
-                            // Lógica del carrito
+                            CartItem item = CartItem(
+                              id: product.id,
+                              quantity: 1,
+                              userId: userData['userId'],
+                              nameCategory: product.nameCategory,
+                              name: product.name,
+                              price: product.price,
+                              color: product.color,
+                              category: product.category,
+                              description: product.description,
+                              image: product.image,
+                              productId: product.id,
+                            );
+                            CartService().addToCart(item);
+                            Fluttertoast.showToast(
+                                msg: "Producto agregado al carrito",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
                           },
                           child: const Text('Agregar al carrito'),
                         ),
@@ -91,7 +120,29 @@ class ProductDetailScreen extends StatelessWidget {
                   const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
-                      // Lógica del carrito
+                      CartItem item = CartItem(
+                        id: product.id,
+                        quantity: 1,
+                        userId: userData['userId'],
+                        nameCategory: product.nameCategory,
+                        name: product.name,
+                        price: product.price,
+                        color: product.color,
+                        category: product.category,
+                        description: product.description,
+                        image: product.image,
+                        productId: product.id,
+                      );
+                      CartService().addToCart(item);
+                      Fluttertoast.showToast(
+                          msg: "Producto agregado al carrito",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
                     },
                     child: const Text('Agregar al carrito'),
                   ),

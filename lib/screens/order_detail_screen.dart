@@ -83,8 +83,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Direccio  de Entrega'),
-                          Text(orderDetail['address']),
+                          Text('Dirección de Entrega'),
+                          Text('${orderDetail['address']}, Perú'),
                         ],
                       ),
                       Row(
