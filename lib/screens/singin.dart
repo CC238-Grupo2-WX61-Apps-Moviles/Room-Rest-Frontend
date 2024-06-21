@@ -1,10 +1,14 @@
 import 'package:akira_mobile/screens/singin2.dart';
 import 'package:flutter/material.dart';
 import 'start.dart';
-import 'package:akira_mobile/screens/home.dart';
 
 class SingInScreen extends StatelessWidget {
-  const SingInScreen({super.key});
+  SingInScreen({Key? key}) : super(key: key);
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController surnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +70,9 @@ class SingInScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           TextField(
+                            controller: nameController,
                             decoration: InputDecoration(
-                              hintText: 'Nombre Completo',
+                              hintText: 'Nombre',
                               hintStyle: const TextStyle(
                                 color: Color(0xFFA1A1A1),
                                 fontSize: 15,
@@ -97,6 +102,39 @@ class SingInScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12.0),
                           TextField(
+                            controller: surnameController,
+                            decoration: InputDecoration(
+                              hintText: 'Apellido',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFFA1A1A1),
+                                fontSize: 15,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400,
+                                height: 0.07,
+                                letterSpacing: 0.50,
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromARGB(0, 158, 158, 158)),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromARGB(0, 158, 158, 158)),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              filled: true,
+                              fillColor: customColor1,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(10.5),
+                                child: Image.asset(
+                                  'assets/usericon.png',
+                                  height: 10.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12.0),
+                          TextField(
+                            controller: emailController,
                             decoration: InputDecoration(
                               hintText: 'Correo',
                               hintStyle: const TextStyle(
@@ -128,6 +166,7 @@ class SingInScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12.0),
                           TextField(
+                            controller: passwordController,
                             decoration: InputDecoration(
                               hintText: 'Contraseña',
                               hintStyle: const TextStyle(
@@ -195,7 +234,14 @@ class SingInScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SingIn2Screen()),
+                            MaterialPageRoute(
+                              builder: (context) => SingIn2Screen(
+                                nameController: nameController,
+                                surnameController: surnameController,
+                                emailController: emailController,
+                                passwordController: passwordController,
+                              ),
+                            ),
                           );
                         },
                         style: ElevatedButton.styleFrom(

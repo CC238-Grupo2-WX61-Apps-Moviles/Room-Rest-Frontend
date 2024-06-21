@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cart.dart'; 
 import 'account.dart'; 
+import 'search.dart';
 
 class CustomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -25,6 +26,7 @@ class CustomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildNavBarItem('assets/homeIcon.png', 'Inicio', 0),
+            buildNavBarItem('assets/homeIcon.png', 'Buscar', 1), // Nuevo ícono
             buildNavBarItem('assets/carIcon.png', 'Carrito', 2),
             buildNavBarItem('assets/accountIcon.png', 'Cuenta', 3),
           ],
@@ -37,11 +39,16 @@ class CustomNavBar extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () {
-          if (index == 2) {
-            
+        if (index == 1) { 
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchScreen()),
+          );
+        } else if  (index == 2) {
+
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CartScreen()),
+              MaterialPageRoute(builder: (context) => CartScreen()),
             );
           } else if (index == 3) {
          

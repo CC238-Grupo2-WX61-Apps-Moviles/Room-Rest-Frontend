@@ -1,9 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:akira_mobile/screens/home.dart';
 import 'package:akira_mobile/screens/start.dart';
+import 'package:akira_mobile/services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+class UserDataProvider {
+  static Map<String, dynamic> userData = {};
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isButtonEnabled = false;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(_validateInputs);
+    _passwordController.addListener(_validateInputs);
+  }
+
+  void _validateInputs() {
+    setState(() {
+      _isButtonEnabled = _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+    });
+  }
+
+
+
+  Future<void> _login() async {
+    try {
+      print('Attempting login with email: ${_emailController.text}, password: ${_passwordController.text}');
+      final response = await AuthService.login(_emailController.text, _passwordController.text);
+      print('Login response: $response');
+
+      if (response['status'] == 'SUCCESS') {
+        if (!mounted) return;
+        final userId = response['data']['userId'];
+        final userDataResponse = await AuthService.getUserData(userId);
+        if (userDataResponse != null) {
+          UserDataProvider.userData = response['data'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          print('Error: Failed to fetch user data for userId: $userId');
+        }
+      } else {
+        setState(() {
+          _errorMessage = 'Credenciales inválidas, vuelva a intentarlo';
+        });
+      }
+    } catch (e) {
+      print('Error during login: $e');
+      setState(() {
+        _errorMessage = 'Ocurrió un error. Por favor, inténtelo de nuevo.';
+      });
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +128,7 @@ class LoginScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 TextField(
+                                  controller: _emailController,
                                   decoration: InputDecoration(
                                     hintText: 'Correo',
                                     hintStyle: const TextStyle(
@@ -96,6 +160,8 @@ class LoginScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 12.0),
                                 TextField(
+                                  controller: _passwordController,
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                     hintText: 'Contraseña',
                                     hintStyle: const TextStyle(
@@ -133,18 +199,25 @@ class LoginScreen extends StatelessWidget {
                                     fontSize: 14.0,
                                   ),
                                 ),
+                                if (_errorMessage != null) ...[
+                                  const SizedBox(height: 10.0),
+                                  Text(
+                                    _errorMessage!,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                             const SizedBox(height: 40.0),
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                );
-                              },
+                              onPressed: _isButtonEnabled ? _login : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 173, 15, 15),
+                                backgroundColor: _isButtonEnabled
+                                    ? const Color.fromARGB(255, 173, 15, 15)
+                                    : Colors.grey,
                                 padding: const EdgeInsets.symmetric(vertical: 18.0),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
