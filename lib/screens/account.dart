@@ -1,5 +1,5 @@
-import 'package:akira_mobile/screens/order_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:akira_mobile/screens/order_detail_screen.dart';
 import 'package:akira_mobile/screens/UpdateAddress.dart';
 import 'package:akira_mobile/screens/start.dart';
 import '../services/shipping_service.dart';
@@ -28,7 +28,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<void> fetchUserData() async {
     try {
-      final data = await UserService.getUserData(UserDataProvider.userData['userId']);
+      final data =
+          await UserService.getUserData(UserDataProvider.userData['userId']);
       setState(() {
         userData = data;
       });
@@ -40,7 +41,8 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<void> fetchShippingData() async {
     try {
       print('UserId: ${UserDataProvider.userData['userId']}');
-      final data = await ShippingService.getShippingData(UserDataProvider.userData['userId']);
+      final data = await ShippingService.getShippingData(
+          UserDataProvider.userData['userId']);
       setState(() {
         shippingData = data;
       });
@@ -51,7 +53,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<void> fetchOrders() async {
     try {
-      final data = await ShippingService.getOrders(UserDataProvider.userData['userId']);
+      final data =
+          await ShippingService.getOrders(UserDataProvider.userData['userId']);
       setState(() {
         orders = List<Map<String, dynamic>>.from(data);
       });
@@ -85,7 +88,8 @@ class _AccountScreenState extends State<AccountScreen> {
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
@@ -113,7 +117,8 @@ class _AccountScreenState extends State<AccountScreen> {
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
@@ -129,20 +134,25 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ),
                     const SizedBox(height: 8.0),
-                    Text('Dirección: ${shippingData?['address'] ?? 'Cargando...'}'),
-                    Text('Distrito: ${shippingData?['district'] ?? 'Cargando...'}'),
-                    Text('Provincia: ${shippingData?['province'] ?? 'Cargando...'}'),
+                    Text(
+                        'Dirección: ${shippingData?['address'] ?? 'Cargando...'}'),
+                    Text(
+                        'Distrito: ${shippingData?['district'] ?? 'Cargando...'}'),
+                    Text(
+                        'Provincia: ${shippingData?['province'] ?? 'Cargando...'}'),
                     const SizedBox(height: 8.0),
                     OutlinedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => UpdateAddressScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => UpdateAddressScreen()),
                         );
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.black),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       child: const Text(
                         'Actualizar Dirección',
@@ -159,7 +169,8 @@ class _AccountScreenState extends State<AccountScreen> {
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(12.0),
@@ -186,7 +197,8 @@ class _AccountScreenState extends State<AccountScreen> {
               Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(12.0),
@@ -208,13 +220,18 @@ class _AccountScreenState extends State<AccountScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => OrderDetailScreen(orderId: order['id']),
+                                builder: (context) =>
+                                    OrderDetailScreen(orderId: order['id']),
                               ),
                             );
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Text('Track Nº: ${order['id']}', style: TextStyle(color: Colors.red)),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Text('Track Nº: ${order['id']}',
+                                  style: TextStyle(color: Colors.red)),
+                            ),
                           ),
                         );
                       }).toList(),
@@ -232,7 +249,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.black),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
                     ),
                     child: const Text(
                       'Cambiar Contraseña',
@@ -248,7 +266,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.black),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
                     ),
                     child: const Text(
                       'Eliminar Cuenta',
@@ -262,13 +281,16 @@ class _AccountScreenState extends State<AccountScreen> {
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => const StartScreen()),
-                            (route) => false,
+                        MaterialPageRoute(
+                            builder: (context) => const StartScreen()),
+                        (route) => false,
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFAA1D1D), // Color de botón #AA1D1D
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      backgroundColor:
+                          const Color(0xFFAA1D1D), // Color de botón #AA1D1D
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
                     ),
                     child: const Text(
                       'Cerrar Sesión',

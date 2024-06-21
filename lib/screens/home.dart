@@ -6,6 +6,7 @@ import '../services/cart_service.dart';
 import 'cart_model.dart';
 import 'login.dart';
 import 'navbar.dart';
+import 'product_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,13 +15,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
-
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
   final PageController _pageController = PageController();
   final Map<String, dynamic> userData = UserDataProvider.userData;
-
 
   @override
   void initState() {
@@ -29,8 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +94,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(productProvider.lecturaProducts.length, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.grey[300],
-                            ),
-                            child: Image.network(
-                              productProvider.lecturaProducts[index].image,
-                              fit: BoxFit.cover,
-                              width: 150.0,
-                              height: 150.0,
+                      children: List.generate(
+                          productProvider.lecturaProducts.length, (index) {
+                        final product = productProvider.lecturaProducts[index];
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductDetailScreen(product: product),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300],
+                                ),
+                                child: Image.network(
+                                  product.image,
+                                  fit: BoxFit.cover,
+                                  width: 150.0,
+                                  height: 150.0,
+                                ),
+                              ),
                             ),
                           ),
                         );
@@ -130,19 +143,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(productProvider.kpopProducts.length, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.grey[300],
-                            ),
-                            child: Image.network(
-                              productProvider.kpopProducts[index].image,
-                              fit: BoxFit.cover,
-                              width: 150.0,
-                              height: 150.0,
+                      children: List.generate(
+                          productProvider.kpopProducts.length, (index) {
+                        final product = productProvider.kpopProducts[index];
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductDetailScreen(product: product),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300],
+                                ),
+                                child: Image.network(
+                                  product.image,
+                                  fit: BoxFit.cover,
+                                  width: 150.0,
+                                  height: 150.0,
+                                ),
+                              ),
                             ),
                           ),
                         );
@@ -162,19 +192,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(productProvider.animeProducts.length, (index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.grey[300],
-                            ),
-                            child: Image.network(
-                              productProvider.animeProducts[index].image,
-                              fit: BoxFit.cover,
-                              width: 150.0,
-                              height: 150.0,
+                      children: List.generate(
+                          productProvider.animeProducts.length, (index) {
+                        final product = productProvider.animeProducts[index];
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductDetailScreen(product: product),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.grey[300],
+                                ),
+                                child: Image.network(
+                                  product.image,
+                                  fit: BoxFit.cover,
+                                  width: 150.0,
+                                  height: 150.0,
+                                ),
+                              ),
                             ),
                           ),
                         );
@@ -195,7 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: productProvider.products.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.7,
                       crossAxisSpacing: 10.0,
@@ -203,60 +251,76 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     itemBuilder: (context, index) {
                       final product = productProvider.products[index];
-                      return Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              product.image,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 100.0,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                product.name,
-                                style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailScreen(product: product),
                               ),
+                            );
+                          },
+                          child: Card(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.network(
+                                  product.image,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: 100.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    product.name,
+                                    style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text('S/. ${product.price}'),
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      CartItem item = CartItem(
+                                        id: product.id,
+                                        quantity: 1,
+                                        userId: userData['userId'],
+                                        nameCategory: product.nameCategory,
+                                        name: product.name,
+                                        price: product.price,
+                                        color: product.color,
+                                        category: product.category,
+                                        description: product.description,
+                                        image: product.image,
+                                        productId: product.id,
+                                      );
+                                      CartService().addToCart(item);
+                                      Fluttertoast.showToast(
+                                          msg: "Producto agregado al carrito",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.green,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    },
+                                    child: const Text('Agregar al carrito'),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('S/. ${product.price}'),
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  CartItem item = CartItem(
-                                    id: product.id,
-                                    quantity: 1,
-                                    userId: userData['userId'],
-                                    nameCategory: product.nameCategory,
-                                    name: product.name,
-                                    price: product.price,
-                                    color: product.color,
-                                    category: product.category,
-                                    description: product.description,
-                                    image: product.image,
-                                    productId: product.id,
-                                  );
-                                  CartService().addToCart(item);
-                                  Fluttertoast.showToast(
-                                      msg: "Producto agregado al carrito",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.green,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0
-                                  );
-                                },
-                                child: const Text('Agregar al carrito'),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     },
