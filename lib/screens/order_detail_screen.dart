@@ -71,7 +71,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Número de Tracking'),
+                      Text('N° Tracking'),
                       Text(orderDetail!['id'].toString()),
                     ],
                   ),
