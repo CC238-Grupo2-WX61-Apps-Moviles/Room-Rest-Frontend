@@ -32,34 +32,70 @@ class _AccountScreenState extends State<AccountScreen> {
           await UserService.getUserData(UserDataProvider.userData['userId']);
       setState(() {
         userData = data;
+        // Asegúrate de que userData['userId'] se establezca correctamente aquí
+        // Podrías imprimir para verificar que data contiene 'id' o 'userId'
+        print('Fetched user data: $data');
+        print(
+            'User ID from data: ${data['id']}'); // Asegúrate de que 'id' sea correcto
+        userData['userId'] =
+            data['id']; // Asignar 'id' desde data a userData['userId']
       });
     } catch (e) {
       print('Failed to fetch user data: $e');
+      // Manejar el error según sea necesario, por ejemplo, mostrando un mensaje al usuario.
     }
   }
 
   Future<void> fetchShippingData() async {
     try {
-      print('UserId: ${UserDataProvider.userData['userId']}');
-      final data = await ShippingService.getShippingData(
-          UserDataProvider.userData['userId']);
-      setState(() {
-        shippingData = data;
-      });
+      if (userData['userId'] != null) {
+        final data = await ShippingService.getShippingData(userData['userId']);
+        setState(() {
+          shippingData = data;
+        });
+      } else {
+        print('User ID is null, unable to fetch shipping data.');
+      }
     } catch (e) {
       print('Failed to fetch shipping data: $e');
+      // Manejar el error según sea necesario.
     }
   }
 
   Future<void> fetchOrders() async {
     try {
-      final data =
-          await ShippingService.getOrders(UserDataProvider.userData['userId']);
-      setState(() {
-        orders = List<Map<String, dynamic>>.from(data);
-      });
+      if (userData['userId'] != null) {
+        final data = await ShippingService.getOrders(userData['userId']);
+        setState(() {
+          orders = List<Map<String, dynamic>>.from(data);
+        });
+      } else {
+        print('User ID is null, unable to fetch orders.');
+      }
     } catch (e) {
       print('Failed to fetch orders: $e');
+      // Manejar el error según sea necesario.
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      // Verificar que userData['userId'] no sea null antes de eliminar
+      if (userData['userId'] != null) {
+        await UserService.deleteUser(userData['userId']);
+        // Eliminación exitosa, navegar a la pantalla de inicio
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const StartScreen()),
+          (route) => false,
+        );
+      } else {
+        print('User ID is null, unable to delete user.');
+        // Manejar el caso donde el ID de usuario es nulo.
+      }
+    } catch (e) {
+      print('Failed to delete user: $e');
+      // Mostrar un mensaje de error al usuario si es necesario.
     }
   }
 
@@ -243,34 +279,78 @@ class _AccountScreenState extends State<AccountScreen> {
             Center(
               child: Column(
                 children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      // Acción para cambiar contraseña
+                  ElevatedButton(
+                    onPressed: () async {
+                      // Mostrar un diálogo de confirmación
+                      bool confirmDelete = await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Confirmar Eliminación'),
+                          content: Text(
+                              '¿Estás seguro de que deseas eliminar tu cuenta?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text('Eliminar'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      // Si el usuario confirma la eliminación
+                      if (confirmDelete == true) {
+                        try {
+                          // Verificar si userData['userId'] no es null antes de eliminar
+                          if (userData['userId'] != null) {
+                            await UserService.deleteUser(userData['userId']);
+                            // Eliminación exitosa, navegar a la pantalla de inicio
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const StartScreen()),
+                              (route) => false,
+                            );
+                          } else {
+                            print('User ID is null, unable to delete user.');
+                            // Aquí puedes mostrar un mensaje o realizar alguna acción adicional
+                          }
+                        } catch (e) {
+                          // Error al eliminar el usuario
+                          print('Failed to delete user: $e');
+                          // Mostrar un mensaje de error al usuario si es necesario
+                        }
+                      }
                     },
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.black),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFAA1D1D),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                     ),
                     child: const Text(
-                      'Cambiar Contraseña',
+                      'Eliminar Cuenta',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   const SizedBox(height: 12.0),
                   OutlinedButton(
                     onPressed: () {
-                      // Acción para eliminar cuenta
+                      // Acción para cambiar contraseña
                     },
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.black),
+                      side: BorderSide(color: Colors.black),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                     ),
                     child: const Text(
-                      'Eliminar Cuenta',
+                      'Cambiar Contraseña',
                       style: TextStyle(
                         color: Colors.black,
                       ),
@@ -290,7 +370,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       backgroundColor:
                           const Color(0xFFAA1D1D), // Color de botón #AA1D1D
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                     ),
                     child: const Text(
                       'Cerrar Sesión',

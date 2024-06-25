@@ -45,6 +45,7 @@ flutter:
     - assets/passwordicon.png
     - assets/returnIcon.png
     - assets/homeIcon.png
+    - assets/search.png
     - assets/accountIcon.png
     - assets/categorIcon.png
     - assets/carIcon.png

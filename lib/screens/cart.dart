@@ -22,22 +22,27 @@ class _CartScreenState extends State<CartScreen> {
     fetchShippingData();
   }
 
-Future<void> fetchShippingData() async {
-  try {
-    final data = await ShippingService.getShippingData(userData['userId']);
-    setState(() {
-      shippingData = data;
-    });
-    print('Shipping data: $shippingData');
-  } catch (e) {
-    print('Failed to fetch shipping data: $e');
+  Future<void> fetchShippingData() async {
+    try {
+      final data = await ShippingService.getShippingData(userData['userId']);
+      setState(() {
+        shippingData = data;
+      });
+      print('Shipping data: $shippingData');
+    } catch (e) {
+      print('Failed to fetch shipping data: $e');
+    }
   }
-}
-
-
 
   Future<void> deleteCartItem(int cartId) async {
     await CartService().deleteCart(cartId);
+    setState(() {
+      futureCartItems = CartService().getCartItems(userData['userId']);
+    });
+  }
+
+  Future<void> clearCart() async {
+    await CartService().clearCart(userData['userId']);
     setState(() {
       futureCartItems = CartService().getCartItems(userData['userId']);
     });
@@ -77,11 +82,13 @@ Future<void> fetchShippingData() async {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20.0),
-                  ...cartItems.map((item) => CartItemWidget(
-                    item: item,
-                    onDelete: deleteCartItem,
-                    onQuantityChanged: () => setState(() {}),
-                  )).toList(),
+                  ...cartItems
+                      .map((item) => CartItemWidget(
+                            item: item,
+                            onDelete: deleteCartItem,
+                            onQuantityChanged: () => setState(() {}),
+                          ))
+                      .toList(),
                   const SizedBox(height: 20.0),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -105,7 +112,8 @@ Future<void> fetchShippingData() async {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Subtotal: \$${subtotal.toStringAsFixed(2)}'),
-                            Text('Gastos de Envío: \$${shipping.toStringAsFixed(2)}'),
+                            Text(
+                                'Gastos de Envío: \$${shipping.toStringAsFixed(2)}'),
                           ],
                         ),
                         const SizedBox(height: 10.0),
@@ -132,18 +140,21 @@ Future<void> fetchShippingData() async {
                         Container(
                           alignment: Alignment.center,
                           child: ElevatedButton(
-                            onPressed: shippingData == null ? null : () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CheckoutScreen(
-                                    userData: userData,
-                                    shippingData: shippingData!,
-                                    total: total,
-                                  ),
-                                ),
-                              );
-                            },
+                            onPressed: shippingData == null
+                                ? null
+                                : () async {
+                                    await clearCart(); // Limpiar el carrito
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CheckoutScreen(
+                                          userData: userData,
+                                          shippingData: shippingData!,
+                                          total: total,
+                                        ),
+                                      ),
+                                    );
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFAA1D1D),
                             ),

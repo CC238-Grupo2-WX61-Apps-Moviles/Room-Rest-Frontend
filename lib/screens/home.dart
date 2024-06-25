@@ -271,7 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   product.image,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
-                                  height: 100.0,
+                                  height:
+                                      150.0, // Ajuste de altura para evitar que se corte la imagen
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -307,14 +308,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                       CartService().addToCart(item);
                                       Fluttertoast.showToast(
-                                          msg: "Producto agregado al carrito",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.green,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
+                                        msg: "Producto agregado al carrito",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.green,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
                                     },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty
+                                          .all<Color>(Colors.red[
+                                              900]!), // Color de fondo rojo 900
+                                      foregroundColor: MaterialStateProperty
+                                          .all<Color>(Colors
+                                              .white), // Color del texto blanco
+                                    ),
                                     child: const Text('Agregar al carrito'),
                                   ),
                                 ),
