@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ShippingService{
 
   static Future<Map<String, dynamic>> getShippingData(int userId) async {
-    final response = await http.get(Uri.parse('https://api-akira.antarticdonkeys.com/shipping/$userId'));
+    final response = await http.get(Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/shipping/$userId'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -14,7 +14,7 @@ class ShippingService{
   }
 
   static Future<Map<String, dynamic>> createDefaultShippingData() async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/shipping');
+    final url = Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/shipping');
 
     final response = await http.post(
       url,
@@ -39,7 +39,7 @@ class ShippingService{
   }
 
   static Future<Map<String, dynamic>> updateShippingData(int id, Map<String, dynamic> shippingData) async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/shipping/$id');
+    final url = Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/shipping/$id');
 
     shippingData['shippingId'] = id;
 
@@ -59,7 +59,7 @@ class ShippingService{
   }
 
   static Future<void> createOrder(String email, String address, String contact, double totalPrice, int userId) async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders');
+    final url = Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/orders');
 
     final response = await http.post(
       url,
@@ -83,7 +83,7 @@ class ShippingService{
   }
 
   static Future<List<dynamic>> getOrders(int userId) async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders?userId=$userId');
+    final url = Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/orders?userId=$userId');
 
     final response = await http.get(url);
 
@@ -95,7 +95,7 @@ class ShippingService{
   }
 
   static Future<List<dynamic>> getOrderDetails(int userId) async {
-    final url = Uri.parse('https://api-akira.antarticdonkeys.com/orders?userId=$userId');
+    final url = Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/orders?userId=$userId');
 
     final response = await http.get(url);
 

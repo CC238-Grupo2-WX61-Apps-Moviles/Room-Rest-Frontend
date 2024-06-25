@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../screens/cart_model.dart';
 
 class CartService {
-  final String baseUrl = 'https://api-akira.antarticdonkeys.com/cart';
+  final String baseUrl = 'https://akira-api-vidqtyxpba-uc.a.run.app/cart';
 
   Future<void> addToCart(CartItem item) async {
     final url = Uri.parse(baseUrl);

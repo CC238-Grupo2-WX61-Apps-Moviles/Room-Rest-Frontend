@@ -10,6 +10,8 @@ class SingIn2Screen extends StatefulWidget {
   final TextEditingController surnameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final TextEditingController typeController;
+
 
   SingIn2Screen({
     Key? key,
@@ -17,6 +19,8 @@ class SingIn2Screen extends StatefulWidget {
     required this.surnameController,
     required this.emailController,
     required this.passwordController,
+    required this.typeController,
+
   }) : super(key: key);
 
   final TextEditingController phoneController = TextEditingController();
@@ -275,6 +279,7 @@ class _SingIn2ScreenState extends State<SingIn2Screen> {
                                                 await AuthService.register(
                                               widget.nameController.text,
                                               widget.surnameController.text,
+                                              widget.typeController.text,
                                               widget.emailController.text,
                                               widget.passwordController.text,
                                               widget.phoneController.text,

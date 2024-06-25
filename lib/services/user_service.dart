@@ -4,10 +4,11 @@ import 'package:http/http.dart' as http;
 class UserService {
   static Future<Map<String, dynamic>> getUserData(int userId) async {
     final response = await http
-        .get(Uri.parse('https://api-akira.antarticdonkeys.com/users/$userId'));
+        .get(Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/users/$userId'));
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      String decodedResponse = utf8.decode(response.bodyBytes);
+      return jsonDecode(decodedResponse);
     } else {
       throw Exception('Failed to load user data');
     }
@@ -15,7 +16,7 @@ class UserService {
 
   static Future<void> deleteUser(int userId) async {
     final response = await http.delete(
-      Uri.parse('https://api-akira.antarticdonkeys.com/users/$userId'),
+      Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/users/$userId'),
     );
 
     if (response.statusCode == 204) {
@@ -28,7 +29,7 @@ class UserService {
   static Future<void> updateUser(
       int userId, Map<String, dynamic> updatedUserData) async {
     final response = await http.put(
-      Uri.parse('https://api-akira.antarticdonkeys.com/users/$userId'),
+      Uri.parse('https://akira-api-vidqtyxpba-uc.a.run.app/users/$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

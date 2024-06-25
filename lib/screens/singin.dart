@@ -14,14 +14,19 @@ class _SingInScreenState extends State<SingInScreen> {
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
+
   bool isButtonEnabled = false;
+
+  List<String> userType = ['Vendedor', 'Fanático'];
 
   void _updateButtonState() {
     setState(() {
       isButtonEnabled = nameController.text.isNotEmpty &&
           surnameController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty;
+          passwordController.text.isNotEmpty &&
+          typeController.text.isNotEmpty;
     });
   }
 
@@ -32,6 +37,7 @@ class _SingInScreenState extends State<SingInScreen> {
     surnameController.addListener(_updateButtonState);
     emailController.addListener(_updateButtonState);
     passwordController.addListener(_updateButtonState);
+    typeController.addListener(_updateButtonState);
   }
 
   @override
@@ -40,6 +46,7 @@ class _SingInScreenState extends State<SingInScreen> {
     surnameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    typeController.dispose();
     super.dispose();
   }
 
@@ -179,6 +186,49 @@ class _SingInScreenState extends State<SingInScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 12.0),
+                                DropdownButtonFormField<String>(
+                                  value: typeController.text.isEmpty ? null : typeController.text,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Tipo de Usuario',
+                                    hintStyle: TextStyle(
+                                      color: Color(0xFFA1A1A1),
+                                      fontSize: 15,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.07,
+                                      letterSpacing: 0.50,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(0, 158, 158, 158)),
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(0, 158, 158, 158)),
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    filled: true,
+                                    fillColor: customColor1,
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.all(13.0),
+                                      child: Icon(Icons.person),
+                                    ),
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      typeController.text = newValue!;
+                                    });
+                                  },
+                                  items: userType.map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+
+                                const SizedBox(height: 12.0),
                                 TextField(
                                   controller: emailController,
                                   decoration: InputDecoration(
@@ -305,8 +355,11 @@ class _SingInScreenState extends State<SingInScreen> {
                                             surnameController:
                                                 surnameController,
                                             emailController: emailController,
+
                                             passwordController:
                                                 passwordController,
+                                            typeController: typeController,
+
                                           ),
                                         ),
                                       );

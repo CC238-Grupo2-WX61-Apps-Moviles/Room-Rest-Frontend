@@ -103,7 +103,7 @@ class _AccountScreenState extends State<AccountScreen> {
           children: [
             Center(
               child: Text(
-                'Hola ${userData['name']}',
+                'Hola ${userData['name']} (${userData['type']})',
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
