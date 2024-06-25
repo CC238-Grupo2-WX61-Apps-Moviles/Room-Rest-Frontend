@@ -1,14 +1,25 @@
-import 'package:akira_mobile/screens/processingshipping.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../services/shipping_service.dart';
+import 'processingshipping.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
   final Map<String, dynamic> shippingData;
   final double total;
 
-  const CheckoutScreen({required this.userData, required this.shippingData, required this.total});
+  const CheckoutScreen({
+    required this.userData,
+    required this.shippingData,
+    required this.total,
+  });
 
+  @override
+  _CheckoutScreenState createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +43,87 @@ class CheckoutScreen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10.0),
-            Text('${userData['name']} ${userData['surname']} +51 ${userData['numberCellphone']}'),
-            Text('${shippingData['address']}'),
-            Text('${shippingData['district']}, ${shippingData['province']}, Perú'),
+            Text(
+                '${widget.userData['name']} ${widget.userData['surname']} +51 ${widget.userData['numberCellphone']}'),
+            Text('${widget.shippingData['address']}'),
+            Text(
+                '${widget.shippingData['district']}, ${widget.shippingData['province']}, Perú'),
             const SizedBox(height: 10.0),
             TextButton(
-              onPressed: () {
-                // Acción para modificar la dirección
+              onPressed: () async {
+                final newShippingData = await showDialog<Map<String, dynamic>>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Modificar Dirección'),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              initialValue: widget.shippingData['address'],
+                              decoration:
+                                  InputDecoration(labelText: 'Dirección'),
+                              onChanged: (value) {
+                                widget.shippingData['address'] = value;
+                              },
+                            ),
+                            TextFormField(
+                              initialValue: widget.shippingData['district'],
+                              decoration:
+                                  InputDecoration(labelText: 'Distrito'),
+                              onChanged: (value) {
+                                widget.shippingData['district'] = value;
+                              },
+                            ),
+                            TextFormField(
+                              initialValue: widget.shippingData['province'],
+                              decoration:
+                                  InputDecoration(labelText: 'Provincia'),
+                              onChanged: (value) {
+                                widget.shippingData['province'] = value;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context, widget.shippingData);
+                          },
+                          child: Text('Guardar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (newShippingData != null) {
+                  try {
+                    await ShippingService.updateShippingData(
+                      widget.shippingData['shippingId'],
+                      newShippingData,
+                    );
+
+                    setState(() {
+                      widget.shippingData['address'] =
+                          newShippingData['address'];
+                      widget.shippingData['district'] =
+                          newShippingData['district'];
+                      widget.shippingData['province'] =
+                          newShippingData['province'];
+                    });
+                  } catch (e) {
+                    print('Error updating shipping data: $e');
+                  }
+                }
               },
               child: const Text(
                 '+ Modificar dirección',
@@ -51,11 +136,64 @@ class CheckoutScreen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10.0),
-            Text('**** **** **** ${shippingData['linkedCard'].substring(shippingData['linkedCard'].length - 4)}'),
+            Text(
+                '**** **** **** ${widget.shippingData['linkedCard'].substring(widget.shippingData['linkedCard'].length - 4)}'),
             const SizedBox(height: 10.0),
             TextButton(
-              onPressed: () {
-                // Acción para modificar el método de pago
+              onPressed: () async {
+                final newPaymentData = await showDialog<Map<String, dynamic>>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Modificar Método de Pago'),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              initialValue: widget.shippingData['linkedCard'],
+                              decoration: InputDecoration(
+                                  labelText: 'Número de Tarjeta'),
+                              onChanged: (value) {
+                                widget.shippingData['linkedCard'] = value;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context, widget.shippingData);
+                          },
+                          child: Text('Guardar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (newPaymentData != null) {
+                  try {
+                    await ShippingService.updateShippingData(
+                      widget.shippingData['shippingId'],
+                      newPaymentData,
+                    );
+
+                    setState(() {
+                      widget.shippingData['linkedCard'] =
+                          newPaymentData['linkedCard'];
+                    });
+                  } catch (e) {
+                    print('Error updating payment data: $e');
+                  }
+                }
               },
               child: const Text(
                 '+ Modificar método de pago',
@@ -74,14 +212,15 @@ class CheckoutScreen extends StatelessWidget {
                 children: [
                   const Text(
                     'Resumen',
-                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Subtotal'),
-                      Text('S/ ${total - 30.00}'),
+                      Text('S/ ${widget.total - 30.00}'),
                     ],
                   ),
                   Row(
@@ -100,7 +239,7 @@ class CheckoutScreen extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'S/ $total',
+                        'S/ ${widget.total}',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -110,11 +249,11 @@ class CheckoutScreen extends StatelessWidget {
                     onPressed: () async {
                       try {
                         await ShippingService.createOrder(
-                          userData['email'],
-                          shippingData['address'],
-                          '${userData['name']} ${userData['surname']}',
-                          total,
-                          userData['userId'],
+                          widget.userData['email'],
+                          widget.shippingData['address'],
+                          '${widget.userData['name']} ${widget.userData['surname']}',
+                          widget.total,
+                          widget.userData['userId'],
                         );
                         Navigator.push(
                           context,
@@ -143,9 +282,7 @@ class CheckoutScreen extends StatelessWidget {
             const SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-               //cnasjkonfjals
-              ],
+              children: [],
             ),
           ],
         ),

@@ -27,7 +27,7 @@ class CustomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildNavBarItem('assets/homeIcon.png', 'Inicio', 0),
-            buildNavBarItem('assets/search.png', 'Buscar', 1), // Nuevo ícono
+            buildNavBarItem('assets/search.png', 'Buscar', 1),
             buildNavBarItem('assets/carIcon.png', 'Carrito', 2),
             buildNavBarItem('assets/accountIcon.png', 'Cuenta', 3),
           ],

@@ -129,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   'S/. ${product.price}',
                                   style: TextStyle(
                                     fontSize: 16.0,
-                                    color: Colors.red[900], // Precio en rojo
+                                    color: Colors.red[900],
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -142,8 +142,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     CartItem item = CartItem(
                                       id: product.id,
                                       quantity: 1,
-                                      userId: userData[
-                                          'userId'], // Asegúrate de tener acceso a userData
+                                      userId: userData['userId'],
                                       nameCategory: product.nameCategory,
                                       name: product.name,
                                       price: product.price,

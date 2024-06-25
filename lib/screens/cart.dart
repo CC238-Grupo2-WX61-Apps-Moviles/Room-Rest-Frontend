@@ -1,7 +1,7 @@
 import 'package:akira_mobile/services/shipping_service.dart';
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
-import 'checkout_screen.dart'; // Asegúrate de que el path es correcto
+import 'checkout_screen.dart';
 import 'cart_model.dart';
 import 'login.dart';
 
@@ -143,7 +143,7 @@ class _CartScreenState extends State<CartScreen> {
                             onPressed: shippingData == null
                                 ? null
                                 : () async {
-                                    await clearCart(); // Limpiar el carrito
+                                    await clearCart();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:akira_mobile/screens/order_detail_screen.dart';
 import 'package:akira_mobile/screens/UpdateAddress.dart';
 import 'package:akira_mobile/screens/start.dart';
+import 'checkout_screen.dart';
 import '../services/shipping_service.dart';
 import '../services/user_service.dart';
 import 'login.dart';
@@ -32,17 +33,13 @@ class _AccountScreenState extends State<AccountScreen> {
           await UserService.getUserData(UserDataProvider.userData['userId']);
       setState(() {
         userData = data;
-        // Asegúrate de que userData['userId'] se establezca correctamente aquí
-        // Podrías imprimir para verificar que data contiene 'id' o 'userId'
+
         print('Fetched user data: $data');
-        print(
-            'User ID from data: ${data['id']}'); // Asegúrate de que 'id' sea correcto
-        userData['userId'] =
-            data['id']; // Asignar 'id' desde data a userData['userId']
+        print('User ID from data: ${data['id']}');
+        userData['userId'] = data['id'];
       });
     } catch (e) {
       print('Failed to fetch user data: $e');
-      // Manejar el error según sea necesario, por ejemplo, mostrando un mensaje al usuario.
     }
   }
 
@@ -58,7 +55,6 @@ class _AccountScreenState extends State<AccountScreen> {
       }
     } catch (e) {
       print('Failed to fetch shipping data: $e');
-      // Manejar el error según sea necesario.
     }
   }
 
@@ -74,16 +70,13 @@ class _AccountScreenState extends State<AccountScreen> {
       }
     } catch (e) {
       print('Failed to fetch orders: $e');
-      // Manejar el error según sea necesario.
     }
   }
 
   Future<void> deleteUser() async {
     try {
-      // Verificar que userData['userId'] no sea null antes de eliminar
       if (userData['userId'] != null) {
         await UserService.deleteUser(userData['userId']);
-        // Eliminación exitosa, navegar a la pantalla de inicio
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const StartScreen()),
@@ -91,11 +84,9 @@ class _AccountScreenState extends State<AccountScreen> {
         );
       } else {
         print('User ID is null, unable to delete user.');
-        // Manejar el caso donde el ID de usuario es nulo.
       }
     } catch (e) {
       print('Failed to delete user: $e');
-      // Mostrar un mensaje de error al usuario si es necesario.
     }
   }
 
@@ -145,6 +136,32 @@ class _AccountScreenState extends State<AccountScreen> {
                     Text('Apellidos: ${userData['surname']}'),
                     Text('Teléfono: ${userData['numberCellphone']}'),
                     Text('Correo: ${userData['email']}'),
+                    const SizedBox(height: 8.0),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                UpdateInfoScreen(userData: userData),
+                          ),
+                        ).then((_) {
+                          fetchUserData();
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.black),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: const Text(
+                        'Actualizar Información',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -182,13 +199,17 @@ class _AccountScreenState extends State<AccountScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UpdateAddressScreen()),
-                        );
+                            builder: (context) => UpdateAddressScreen(),
+                          ),
+                        ).then((_) {
+                          fetchShippingData();
+                        });
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.black),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                       ),
                       child: const Text(
                         'Actualizar Dirección',
@@ -281,7 +302,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      // Mostrar un diálogo de confirmación
                       bool confirmDelete = await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -301,13 +321,10 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       );
 
-                      // Si el usuario confirma la eliminación
                       if (confirmDelete == true) {
                         try {
-                          // Verificar si userData['userId'] no es null antes de eliminar
                           if (userData['userId'] != null) {
                             await UserService.deleteUser(userData['userId']);
-                            // Eliminación exitosa, navegar a la pantalla de inicio
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -316,12 +333,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             );
                           } else {
                             print('User ID is null, unable to delete user.');
-                            // Aquí puedes mostrar un mensaje o realizar alguna acción adicional
                           }
                         } catch (e) {
-                          // Error al eliminar el usuario
                           print('Failed to delete user: $e');
-                          // Mostrar un mensaje de error al usuario si es necesario
                         }
                       }
                     },
@@ -340,9 +354,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   OutlinedButton(
-                    onPressed: () {
-                      // Acción para cambiar contraseña
-                    },
+                    onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.black),
                       shape: RoundedRectangleBorder(
@@ -367,8 +379,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFFAA1D1D), // Color de botón #AA1D1D
+                      backgroundColor: const Color(0xFFAA1D1D),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -382,6 +393,84 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UpdateInfoScreen extends StatefulWidget {
+  final Map<String, dynamic> userData;
+
+  const UpdateInfoScreen({Key? key, required this.userData}) : super(key: key);
+
+  @override
+  _UpdateInfoScreenState createState() => _UpdateInfoScreenState();
+}
+
+class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.userData['name'];
+    _surnameController.text = widget.userData['surname'];
+    _phoneController.text = widget.userData['numberCellphone'];
+    _emailController.text = widget.userData['email'];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Actualizar Información'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Nombres'),
+            ),
+            TextField(
+              controller: _surnameController,
+              decoration: const InputDecoration(labelText: 'Apellidos'),
+            ),
+            TextField(
+              controller: _phoneController,
+              decoration: const InputDecoration(labelText: 'Teléfono'),
+            ),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Correo'),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () async {
+                Map<String, dynamic> updatedData = {
+                  'name': _nameController.text,
+                  'surname': _surnameController.text,
+                  'numberCellphone': _phoneController.text,
+                  'email': _emailController.text,
+                };
+
+                try {
+                  await UserService.updateUser(
+                      widget.userData['userId'], updatedData);
+                  Navigator.pop(context);
+                } catch (e) {
+                  print('Failed to update user: $e');
+                }
+              },
+              child: const Text('Guardar Cambios'),
             ),
           ],
         ),

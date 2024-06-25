@@ -24,4 +24,21 @@ class UserService {
       throw Exception('Failed to delete user: ${response.statusCode}');
     }
   }
+
+  static Future<void> updateUser(
+      int userId, Map<String, dynamic> updatedUserData) async {
+    final response = await http.put(
+      Uri.parse('https://api-akira.antarticdonkeys.com/users/$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(updatedUserData),
+    );
+
+    if (response.statusCode == 200) {
+      print('User updated successfully');
+    } else {
+      throw Exception('Failed to update user: ${response.statusCode}');
+    }
+  }
 }

@@ -1,11 +1,11 @@
 import 'package:akira_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:akira_mobile/screens/home.dart'; // Asegúrate de importar HomeScreen
+import 'package:akira_mobile/screens/home.dart';
 import 'singin.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,14 +39,16 @@ class StartScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 40.0),
                         ElevatedButton(
-                           onPressed: () {
+                          onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 173, 15, 15),
+                            backgroundColor:
+                                const Color.fromARGB(255, 173, 15, 15),
                             padding: const EdgeInsets.symmetric(vertical: 18.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -63,14 +65,16 @@ class StartScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 15.0),
                         ElevatedButton(
-                          onPressed: () {                    
+                          onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => SingInScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => SingInScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 201, 201, 201),
+                            backgroundColor:
+                                const Color.fromARGB(255, 201, 201, 201),
                             padding: const EdgeInsets.symmetric(vertical: 18.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -85,30 +89,31 @@ class StartScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                         const SizedBox(height: 40.0),
-                          const Text(
-                            'Al continuar, aceptas nuestros',
+                        const SizedBox(height: 40.0),
+                        const Text(
+                          'Al continuar, aceptas nuestros',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 58, 58, 58),
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomeScreen()),
+                            );
+                          },
+                          child: const Text(
+                            'términos y condiciones',
                             style: TextStyle(
                               color: Color.fromARGB(255, 58, 58, 58),
                               fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const HomeScreen()),
-                              );
-                            },
-                            child: const Text(
-                              'términos y condiciones',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 58, 58, 58),
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
+                        ),
                       ],
                     ),
                   ),

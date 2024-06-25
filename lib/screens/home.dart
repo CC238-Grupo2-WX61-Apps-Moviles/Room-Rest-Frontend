@@ -271,8 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   product.image,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
-                                  height:
-                                      150.0, // Ajuste de altura para evitar que se corte la imagen
+                                  height: 150.0,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -318,12 +317,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty
-                                          .all<Color>(Colors.red[
-                                              900]!), // Color de fondo rojo 900
-                                      foregroundColor: MaterialStateProperty
-                                          .all<Color>(Colors
-                                              .white), // Color del texto blanco
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.red[900]!),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
                                     ),
                                     child: const Text('Agregar al carrito'),
                                   ),
