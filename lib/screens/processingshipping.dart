@@ -14,7 +14,7 @@ class ProcessingPaymentScreen extends StatelessWidget {
               Image.asset('assets/logo.png', height: 150),
               const SizedBox(height: 30.0),
               const Text(
-                '¡Su compra ha sido procesada correctamente!',
+                '¡Su compra ha sido procesada con éxito!',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
