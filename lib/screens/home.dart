@@ -242,10 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: productProvider.products.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.7,
+                      childAspectRatio: 0.6,
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                     ),
@@ -258,8 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductDetailScreen(product: product),
+                                builder: (context) => ProductDetailScreen(product: product),
                               ),
                             );
                           },
@@ -278,16 +276,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     product.name,
                                     style: const TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 16.0, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Text('S/. ${product.price}'),
                                 ),
-                                const Spacer(),
+                                Expanded(
+                                  child: Container(),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ElevatedButton(
@@ -317,12 +315,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.red[900]!),
-                                      foregroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.white),
+                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red[900]!),
+                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                                     ),
                                     child: const Text('Agregar al carrito'),
                                   ),
@@ -334,6 +328,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
+
+
                 ],
               ),
             ),
